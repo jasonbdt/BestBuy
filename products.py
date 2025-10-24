@@ -1,6 +1,14 @@
 from typing import Self
 
 
+class ProductNotActiveError(Exception):
+    pass
+
+
+class ProductQuantityError(Exception):
+    pass
+
+
 class Product:
     """
     Represents a purchasable product with price, stock quantity, and active state.
@@ -111,10 +119,12 @@ class Product:
         Raises:
             ValueError: If quantity < 1 or quantity exceeds available stock.
         """
-        if quantity > self.quantity:
-            raise ValueError("You cannot buy more items than are currently in stock.")
+        if not self.active:
+            raise ProductNotActiveError("Product Inactive")
+        elif quantity > self.quantity:
+            raise ProductQuantityError(f"Product only has {self.quantity} in stock")
         elif quantity < 1:
-            raise ValueError("You cannot purchase the product zero times or less.")
+            raise ProductQuantityError("Product Quantity Invalid")
 
         self.set_quantity(self.quantity - quantity)
         return quantity * self.price
