@@ -2,10 +2,24 @@ from typing import Self
 
 
 class ProductNotActiveError(Exception):
+    """
+    Raised when an operation targets a product that is not active.
+
+    Typical use:
+        raise ProductNotActiveError("Product 'X' is inactive.")
+    """
     pass
 
 
 class ProductQuantityError(Exception):
+    """
+    Raised when the requested quantity cannot be fulfilled.
+
+    Typical use:
+        raise ProductQuantityError(
+            "Requested 5 units, only 2 available."
+        )
+    """
     pass
 
 
