@@ -26,7 +26,10 @@ def get_user_choice(prompt: str) -> Optional[tuple[Any, str]]:
             break
 
 
-def get_valid_int(prompt: str, num_range: NumRange = (0, 1), allow_empty: bool = False) -> int | None:
+def get_valid_int(
+    prompt: str, num_range: NumRange = (0, 1),
+    allow_empty: bool = False
+) -> int | None:
     while True:
         min_value, max_value = num_range
 
