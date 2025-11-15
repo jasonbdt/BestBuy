@@ -1,9 +1,11 @@
 from typing import Any, Optional
 import sys
 
-from products import Product
+from products import Product, ProductNotActiveError, ProductQuantityError
 from store import Store
 
+
+NumRange = tuple[int, int]
 
 def display_menu() -> None:
     print("\n   Store Menu")
@@ -24,6 +26,29 @@ def get_user_choice(prompt: str) -> Optional[tuple[Any, str]]:
             break
 
 
+def get_valid_int(prompt: str, num_range: NumRange = (0, 1), allow_empty: bool = False) -> int | None:
+    while True:
+        min_value, max_value = num_range
+
+        try:
+            user_num = input(f"{prompt} ({min_value}-{max_value}): ")
+
+            if allow_empty and user_num == "":
+                return None
+
+            user_num = int(user_num)
+            if min_value > user_num or user_num > max_value:
+                print("Error: You entered an invalid number. Please only use "
+                      f"numbers between {min_value} and {max_value}.\n")
+                continue
+
+            return user_num
+        except ValueError:
+            print("ValueError")
+            print("Error: You entered an invalid number. Please only use "
+                  f"numbers between {min_value} and {max_value}.\n")
+
+
 def display_all_products(store: Store) -> None:
     print("------")
     for idx, product in enumerate(store.get_all_products(), start=1):
@@ -34,6 +59,35 @@ def display_all_products(store: Store) -> None:
 
 def display_total_amount(store: Store) -> None:
     print(f"Total of {store.get_total_quantity()} items in store")
+
+
+def order_items(store: Store) -> None:
+    shopping_list = []
+    display_all_products(store)
+    print("When you want to finish order, enter empty text.")
+
+    while True:
+        products = store.get_all_products()
+        user_order = get_valid_int("Which product # do you want", (1, len(products)), True)
+
+        if user_order:
+            product = products[user_order-1]
+            user_amount = get_valid_int("What amount do you want", (1, product.quantity))
+            shopping_list.append((products[int(user_order)-1], user_amount))
+            print("Product added to list!\n")
+        else:
+            break
+
+    if shopping_list:
+        try:
+            total_price = store.order(shopping_list)
+        except (ProductNotActiveError, ProductQuantityError) as err:
+            print(f"Error while making order:\n{err}\n")
+        else:
+            print("********")
+            print(f"Order made! Total payment: ${total_price}")
+    else:
+        print("Your shopping list is empty. Order cancelled!")
 
 
 def exit_app() -> None:
@@ -55,6 +109,7 @@ def start(store: Store) -> None:
 COMMANDS = {
     "List all products in store": (display_all_products, "store"),
     "Show total amount in store": (display_total_amount, "store"),
+    "Make an order": (order_items, "store"),
     "Quit": (exit_app, None)
 }
 
