@@ -70,7 +70,8 @@ class Product:
         """
         if quantity < 0:
             raise ValueError("A product's quantity cannot be less than zero.")
-        elif quantity == 0:
+
+        if quantity == 0:
             self.deactivate()
 
         self.quantity = quantity
@@ -121,9 +122,11 @@ class Product:
         """
         if not self.active:
             raise ProductNotActiveError("Product Inactive")
-        elif quantity > self.quantity:
+
+        if quantity > self.quantity:
             raise ProductQuantityError(f"Product only has {self.quantity} in stock")
-        elif quantity < 1:
+
+        if quantity < 1:
             raise ProductQuantityError("Product Quantity Invalid")
 
         self.set_quantity(self.quantity - quantity)
