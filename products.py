@@ -103,7 +103,7 @@ class Product:
         Side Effects:
             Writes a formatted summary to stdout.
         """
-        print(f"{self.name}, Price: ${self.price:.2f}, Quantity: {self.quantity}")
+        print(f"{self.name}, Price: ${self.price}, Quantity: {self.quantity}")
 
 
     def buy(self: Self, quantity: int) -> float:
