@@ -1,5 +1,48 @@
+from typing import Any, Optional
+import sys
+
 from products import Product
 from store import Store
+
+
+def display_menu() -> None:
+    print("\n   Store Menu")
+    print("   ----------")
+    for idx, command in enumerate(COMMANDS, start=1):
+        print(f"{idx}. {command}")
+
+
+def get_user_choice(prompt: str) -> Optional[tuple[Any, str]]:
+    while True:
+        try:
+            num = int(input(f"{prompt} "))
+            menu_keys = [item for item in COMMANDS]
+            return COMMANDS[menu_keys[num-1]]
+        except ValueError:
+            print("Error with your choice! Try again!")
+        except IndexError:
+            break
+
+
+def exit_app() -> None:
+    sys.exit(0)
+
+
+def start(store: Store) -> None:
+    while True:
+        display_menu()
+        user_cmd, cmd_args = get_user_choice("Please choose a number:")
+
+        if user_cmd is not None:
+            if cmd_args is not None:
+                user_cmd(store)
+            else:
+                user_cmd()
+
+
+COMMANDS = {
+    "Quit": (exit_app, None)
+}
 
 
 def main() -> None:
@@ -9,12 +52,11 @@ def main() -> None:
         Product("Google Pixel 7", price=500, quantity=250),
     ]
 
-    best_buy = Store(product_list)
-    products = best_buy.get_all_products()
-
-    print(best_buy.get_total_quantity())
-    print(best_buy.order([(products[0], 1), (products[1], 2)]))
+    start(Store(product_list))
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        exit_app()
