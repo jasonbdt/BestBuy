@@ -8,7 +8,6 @@ class ProductNotActiveError(Exception):
     Typical use:
         raise ProductNotActiveError("Product 'X' is inactive.")
     """
-    pass
 
 
 class ProductQuantityError(Exception):
@@ -20,7 +19,6 @@ class ProductQuantityError(Exception):
             "Requested 5 units, only 2 available."
         )
     """
-    pass
 
 
 class Product:
