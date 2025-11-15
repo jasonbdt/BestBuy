@@ -18,7 +18,7 @@ def get_user_choice(prompt: str) -> Optional[tuple[Any, str]]:
     while True:
         try:
             num = int(input(f"{prompt} "))
-            menu_keys = [item for item in COMMANDS]
+            menu_keys = list(COMMANDS)
             return COMMANDS[menu_keys[num-1]]
         except ValueError:
             print("Error with your choice! Try again!")
