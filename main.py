@@ -24,6 +24,14 @@ def get_user_choice(prompt: str) -> Optional[tuple[Any, str]]:
             break
 
 
+def display_all_products(store: Store) -> None:
+    print("------")
+    for idx, product in enumerate(store.get_all_products(), start=1):
+        print(f"{idx}. ", end="")
+        product.show()
+    print("------")
+
+
 def exit_app() -> None:
     sys.exit(0)
 
@@ -41,6 +49,7 @@ def start(store: Store) -> None:
 
 
 COMMANDS = {
+    "List all products in store": (display_all_products, "store"),
     "Quit": (exit_app, None)
 }
 
